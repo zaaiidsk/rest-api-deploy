@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probar API Rest</title>
+  <style>
+    article {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    img {
+      height: auto;
+      width: 320px;
+      max-width: 100%;
+    }
+  </style>
+    <script type="module">
+        fetch('http://localhost:4000/movies') // Hacemos una petición a la API Rest, GET HTTP
+        .then(res => res.json()) // Convertimos la respuesta a JSON
+        .then( movies => {
+            const html = movies.map(
+                movie => {
+                    return `
+                        <article data-id="${movie.id}">
+                            <h2>${movie.title}</h2>
+                            <img src="${movie.poster}" alt="${movie.title}">
+                            <p>~${movie.year}</p>
+
+                            <button>Eliminar</button>
+                        </article>
+                    `;
+                }).join(''); // Unimos todos los elementos del array en un string
+            
+                document.querySelector('main').innerHTML = html; // Insertamos el HTML generado en el body
+
+                document.addEventListener('click', e => {
+                    if (e.target.matches('button')) {
+                        const article = e.target.closest('article'); // Encontramos el artículo padre del botón
+                        const id = article.dataset.id; // Obtenemos el ID del artículo
+
+                        fetch(`http://localhost:4000/movies/${id}`, {
+                            method: 'DELETE' // Hacemos una petición DELETE a la API Rest
+                        })
+                        .then(res => {
+                            if (res.ok) { // ✅ res.ok verifica si el status está entre 200-299
+                                article.remove(); // Eliminamos el artículo del DOM
+                            } else {
+                                alert('Error al eliminar la película');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error de conexión al eliminar la película');
+                        })
+                    }
+                })
+        })
+
+    </script>
+</head>
+
+<body>
+<main>
+    <h1>Películas</h1>
+    <p>Lista de películas obtenidas desde una API Rest</p>
+</main>
+</body>
+
+</html>

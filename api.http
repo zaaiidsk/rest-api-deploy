@@ -1,0 +1,30 @@
+### Recuperar todas las películas
+GET http://localhost:4000/movies
+
+### Recuperar una película por ID
+GET http://localhost:4000/movies/8fb17ae1-bdfe-45e5-a871-4772d7e526b8
+
+### Recuperar una película por genero
+GET http://localhost:4000/movies?genre=Fantasy
+
+### Crear una nueva película
+POST http://localhost:4000/movies
+Content-Type: application/json
+
+{
+    "title": "Titanic",
+    "year": 1997,
+    "director": "James Cameron",
+    "duration": 186,
+    "poster": "https://i.pinimg.com/originals/42/42/65/4242658e6f1b0d6322a4a93e0383108b.png",
+    "genre": ["Drama", "Romance"],
+    "rate": 7.8
+}
+
+### Actualiazar una película
+PATCH http://localhost:4000/movies/9e6106f0-848b-4810-a11a-3d832a5610f9
+Content-Type: application/json
+
+{
+    "year": 1997
+}
